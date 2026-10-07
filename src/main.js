@@ -1,10 +1,7 @@
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 
-const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-const staticClosing = window.matchMedia(
-  "(max-width: 760px), (max-height: 600px), (prefers-reduced-motion: reduce)",
-);
+const staticClosing = window.matchMedia("(max-width: 760px)");
 const closing = document.querySelector(".closing");
 const archive = document.querySelector(".archive");
 const archivePoster = archive.querySelector("figure");
@@ -14,7 +11,12 @@ const heroImage = document.querySelector(".hero-image");
 const navigation = document.querySelector(".nav");
 const links = [...document.querySelectorAll(".nav-link")];
 const sections = links.map((link) => document.querySelector(link.hash));
-let lenis;
+const lenis = new Lenis({
+  duration: 0.85,
+  smoothWheel: true,
+  anchors: true,
+  respectReducedMotion: false,
+});
 let geometry;
 let geometryDirty = true;
 let previousY = -1;
@@ -27,7 +29,7 @@ function invalidateGeometry() {
 }
 
 function refreshLayout() {
-  lenis?.resize();
+  lenis.resize();
   invalidateGeometry();
 }
 
@@ -56,14 +58,7 @@ function measureGeometry() {
   previousProgress = -1;
 }
 
-function syncMotionPreference() {
-  if (reduced.matches) {
-    lenis?.destroy();
-    lenis = undefined;
-    heroImage.style.transform = "";
-  } else {
-    lenis ??= new Lenis({ duration: 0.85, smoothWheel: true, anchors: true });
-  }
+function syncClosingLayout() {
   if (staticClosing.matches) {
     archive.style.transform = "";
     archive.style.filter = "";
@@ -72,9 +67,8 @@ function syncMotionPreference() {
   }
   refreshLayout();
 }
-reduced.addEventListener("change", syncMotionPreference);
-staticClosing.addEventListener("change", syncMotionPreference);
-syncMotionPreference();
+staticClosing.addEventListener("change", syncClosingLayout);
+syncClosingLayout();
 
 const brand = document.querySelector(".brand");
 brand.addEventListener("pointerdown", (event) => {
@@ -85,14 +79,7 @@ brand.addEventListener("pointerdown", (event) => {
 brand.addEventListener("click", (event) => {
   event.preventDefault();
   event.stopPropagation();
-  if (lenis) {
-    lenis.scrollTo(0, { duration: 1.6, easing: (t) => 1 - Math.pow(1 - t, 3) });
-  } else {
-    window.scrollTo({
-      top: 0,
-      behavior: reduced.matches ? "instant" : "smooth",
-    });
-  }
+  lenis.scrollTo(0, { duration: 1.6, easing: (t) => 1 - Math.pow(1 - t, 3) });
   history.replaceState(null, "", "#top");
 });
 
@@ -100,8 +87,7 @@ footer.addEventListener("focusin", () => {
   const top = staticClosing.matches
     ? window.scrollY + footer.getBoundingClientRect().top
     : closing.offsetTop + closing.offsetHeight - closingStage.offsetHeight;
-  if (lenis) lenis.scrollTo(top, { immediate: true });
-  else window.scrollTo({ top, behavior: "instant" });
+  lenis.scrollTo(top, { immediate: true });
 });
 
 function updateNavigation(y) {
@@ -124,7 +110,7 @@ function updateNavigation(y) {
 }
 
 function updateHero(y) {
-  if (reduced.matches || y >= geometry.viewportHeight * 1.3) return;
+  if (y >= geometry.viewportHeight * 1.3) return;
   const offset = Math.min(y, geometry.viewportHeight) * 0.08;
   heroImage.style.transform = `translate3d(0, ${offset}px, 0)`;
 }
@@ -146,7 +132,7 @@ function updateClosing(y) {
 
 function tick(time) {
   if (geometryDirty) measureGeometry();
-  lenis?.raf(time);
+  lenis.raf(time);
   const y = window.scrollY;
 
   if (y !== previousY) {
@@ -178,14 +164,12 @@ const revealObserver = new IntersectionObserver(
   },
   { threshold: 0.12 },
 );
-if (!reduced.matches) {
-  document.querySelectorAll("[data-reveal]").forEach((element) => {
-    if (element.getBoundingClientRect().top >= innerHeight) {
-      element.classList.add("reveal-pending");
-      revealObserver.observe(element);
-    }
-  });
-}
+document.querySelectorAll("[data-reveal]").forEach((element) => {
+  if (element.getBoundingClientRect().top >= innerHeight) {
+    element.classList.add("reveal-pending");
+    revealObserver.observe(element);
+  }
+});
 
 const viewer = document.querySelector(".art-viewer");
 const viewerArt = viewer.querySelector(".viewer-art");
@@ -214,7 +198,7 @@ artworks.forEach((link) =>
     renderArtwork(link);
     viewer.showModal();
     document.body.classList.add("viewer-open");
-    lenis?.stop();
+    lenis.stop();
   }),
 );
 viewer
@@ -222,6 +206,6 @@ viewer
   .addEventListener("click", () => viewer.close());
 viewer.addEventListener("close", () => {
   document.body.classList.remove("viewer-open");
-  lenis?.start();
+  lenis.start();
   viewerOpener?.focus({ preventScroll: true });
 });
