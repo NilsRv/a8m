@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#111110" />
+    <meta name="description" content="A8M • All Hate’M" />
+    <title>A8M • All Hate’M</title>
+    <link rel="icon" href="/media/logo.png" type="image/png" />
+    <link
+      rel="preload"
+      href="/fonts/AlbraLight.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <a class="skip" href="#collectif">Aller au contenu</a>
+    <header class="nav">
+      <a class="brand" href="#top" aria-label="A8M • accueil"
+        ><img
+          class="brand-default"
+          src="/media/logo-white.png"
+          alt="A8M"
+          width="64"
+          height="64" /><img
+          class="brand-neon"
+          src="/media/logo-topbar-neon.webp"
+          alt=""
+          aria-hidden="true"
+          width="64"
+          height="64"
+      /></a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a class="nav-link nav-about" href="#collectif">A PROPOS</a
+        ><a class="nav-link nav-roster" href="#roster">EQUIPE</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-image"></div>
+        <div class="hero-shade"></div>
+        <h1 id="hero-title" class="hero-wordmark">
+          <span class="hero-wordmark-art"
+            ><img
+              class="wordmark-default"
+              src="/media/wordmark.png"
+              alt="All Hate’m"
+              width="1746"
+              height="393"
+              fetchpriority="high" /><img
+              class="wordmark-neon"
+              src="/media/wordmark-neon.webp"
+              alt=""
+              aria-hidden="true"
+              width="1746"
+              height="393"
+          /></span>
+        </h1>
+      </section>
+      <section class="about" id="collectif" aria-labelledby="about-label">
+        <h2 id="about-label" class="about-label">A PROPOS</h2>
+        <div class="about-layout">
+          <div data-reveal>
+            <div class="about-description">
+              <p>
+                Un collectif forgé de résilience et de volonté, qui a pour
+                unique ambition de créer un espace où rêves et passions peuvent
+                voir le jour.
+              </p>
+              <p>
+                Fusion de tout ce qui compte vraiment pour nous, afin de
+                construire ce qui nous représente vraiment. Que ça leur plaise
+                ou non.
+              </p>
+              <p class="about-closing">
+                Parce qu'au final, all my homies hate 'm.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="roster" id="roster" aria-labelledby="roster-title">
+        <h2 id="roster-title" class="roster-label">EQUIPE</h2>
+        <div class="roster-spread">
+          <div class="roster-intro">
+            <p>Notre équipe Rocket League.</p>
+            <p>Participe actuellement aux RBRS Fall 2026.</p>
+          </div>
+          <div class="roster-members">
+            <ul class="roster-players" aria-label="Joueurs">
+              <li class="roster-member">
+                <h3>Rinkeo</h3>
+                <span>JOUEUR</span>
+              </li>
+              <li class="roster-member">
+                <h3>Jeyzo</h3>
+                <span>JOUEUR</span>
+              </li>
+              <li class="roster-member">
+                <h3>Igho</h3>
+                <span>JOUEUR</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section class="closing" id="signal" aria-labelledby="archive-title">
+        <div class="closing-sticky">
+          <div class="archive">
+            <h2 class="archive-label" id="archive-title">ARCHIVES</h2>
+            <div class="archive-images">
+              <figure class="poster-one">
+                <a
+                  class="archive-open"
+                  href="/media/poster.jpg"
+                  data-title="Affiche du collectif"
+                  aria-label="Agrandir l’affiche du collectif"
+                >
+                  <img
+                    class="archive-art"
+                    src="/media/poster.webp"
+                    alt="Affiche A8M : Rinkeo, Jeyzo et Igho, sur le portrait granuleux d’un dobermann."
+                    loading="lazy"
+                    width="1280"
+                    height="1600"
+                  />
+                </a>
+              </figure>
+            </div>
+          </div>
+          <footer class="footer">
+            <div class="footer-center">
+              <img
+                src="/media/wordmark.png"
+                alt="All Hate’M"
+                width="1000"
+                height="225"
+              />
+            </div>
+            <a
+              class="footer-x"
+              href="https://x.com/all8m_"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="A8M sur X (nouvel onglet)"
+              >SUIVRE SUR X</a
+            >
+          </footer>
+        </div>
+      </section>
+    </main>
+    <dialog
+      class="art-viewer"
+      aria-labelledby="viewer-title"
+      data-lenis-prevent
+    >
+      <div class="viewer-bar">
+        <h2 id="viewer-title">Archives</h2>
+        <button class="viewer-close" type="button" autofocus>
+          Fermer <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="viewer-art"></div>
+    </dialog>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
