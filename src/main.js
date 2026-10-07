@@ -23,6 +23,7 @@ let previousY = -1;
 let previousProgress = -1;
 let activeSection = -1;
 let navigationOnClosing = false;
+let navigationScrollAnchor = 0;
 
 function invalidateGeometry() {
   geometryDirty = true;
@@ -59,6 +60,8 @@ function measureGeometry() {
 }
 
 function syncClosingLayout() {
+  navigation.classList.remove("is-hidden");
+  navigationScrollAnchor = window.scrollY;
   if (staticClosing.matches) {
     archive.style.transform = "";
     archive.style.filter = "";
@@ -91,6 +94,17 @@ footer.addEventListener("focusin", () => {
 });
 
 function updateNavigation(y) {
+  if (staticClosing.matches) {
+    const scrollY = Math.max(0, Math.min(y, lenis.limit));
+    const distance = scrollY - navigationScrollAnchor;
+    if (scrollY <= 120) {
+      navigation.classList.remove("is-hidden");
+      navigationScrollAnchor = scrollY;
+    } else if (Math.abs(distance) >= 8) {
+      navigation.classList.toggle("is-hidden", distance > 0);
+      navigationScrollAnchor = scrollY;
+    }
+  }
   const onClosing = y + geometry.navigationMidpoint >= geometry.closingTop;
   if (onClosing !== navigationOnClosing) {
     navigation.classList.toggle("on-closing", onClosing);
