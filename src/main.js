@@ -1,5 +1,11 @@
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
+import { initHeroDistortion } from "./hero-distortion.js";
+import { initHeroTrail } from "./hero-trail.js";
+
+const hero = document.querySelector(".hero");
+const heroDistortion = initHeroDistortion(hero);
+initHeroTrail(hero, heroDistortion);
 
 const staticClosing = window.matchMedia("(max-width: 760px)");
 const closing = document.querySelector(".closing");
