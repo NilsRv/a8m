@@ -28,9 +28,17 @@ export function initHeroDistortion(hero) {
       vec2 localUV = point / size;
       float edgeX = min(1., 4. * (1. - min(1., abs(localUV.x * 2. - 1.))));
       float edgeY = min(1., 4. * (1. - min(1., abs(localUV.y * 2. - 1.))));
-      vec2 offset = velocity * (.08 * edgeX * edgeY + .02);
-      vec2 sampleUV = localUV * crop + (1. - crop) * vec2(.5, .4) - offset;
-      gl_FragColor = texture2D(image, clamp(sampleUV, .001, .999));
+      vec2 offset = velocity * (.14 * edgeX * edgeY + .03);
+      vec2 originalUV = localUV * crop + (1. - crop) * vec2(.5, .4);
+      vec4 original = texture2D(image, clamp(originalUV, .001, .999));
+      vec4 displaced = texture2D(image, clamp(originalUV - offset, .001, .999));
+      // Keep bright parts of the photo from flashing through the red trail.
+      // These weights match the grayscale filter applied to the background.
+      vec3 luminance = vec3(.2126, .7152, .0722);
+      float originalLight = dot(original.rgb, luminance);
+      float displacedLight = dot(displaced.rgb, luminance);
+      displaced.rgb *= min(1., originalLight / max(displacedLight, .0001));
+      gl_FragColor = displaced;
     }`;
   function shader(type, source) {
     const result = gl.createShader(type);
